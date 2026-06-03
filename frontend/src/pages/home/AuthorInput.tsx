@@ -6,11 +6,14 @@ interface Author {
 }
 
 type AuthorInputProps = {
-  value?: string;          // author_id
-  displayName?: string;    // nombre del autor seleccionado
+  value?: string;         
+  displayName?: string;   
   onChangeValue: (authorId: string, displayName: string) => void;
 };
 
+/**
+ * Input para ingresar el nombre de usuario (autor) o autor objetivo. Contiene auto completado y lista scrolleable.
+ */
 function AuthorInput({ onChangeValue, value, displayName }: AuthorInputProps) {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<Author[]>([]);
@@ -22,16 +25,12 @@ function AuthorInput({ onChangeValue, value, displayName }: AuthorInputProps) {
   const itemRefs = useRef<(HTMLLIElement | null)[]>([]);
   const cacheRef = useRef<Map<string, Author[]>>(new Map());
 
-  /* Reset cuando el valor externo se limpia */
   useEffect(() => {
-    // Si hay un autor seleccionado, mostrar su display_name
     if (displayName) {
       setQuery(displayName);
       setHasSelected(true);
       setIsOpen(false);
     }
-
-    // Solo resetear si value es vacío
     if (!value) {
       setQuery("");
       setResults([]);
@@ -43,14 +42,11 @@ function AuthorInput({ onChangeValue, value, displayName }: AuthorInputProps) {
   }, [value, displayName]);
 
 
-  /* Autocomplete con debounce + cache */
   useEffect(() => {
     if (hasSelected || !query) return;
 
-    // Limpiar resultados viejos al empezar nueva búsqueda
     setResults([]);
 
-    // 1️⃣ Cache inmediato (UX instantánea)
     if (cacheRef.current.has(query)) {
       setResults(cacheRef.current.get(query)!);
       setLoading(false);
@@ -69,9 +65,8 @@ function AuthorInput({ onChangeValue, value, displayName }: AuthorInputProps) {
       )
         .then((res) => res.json())
         .then((data: Author[]) => {
-          // Solo actualizar si este query sigue siendo el actual
           if (isCurrentQuery) {
-            cacheRef.current.set(query, data); // 2️⃣ cache
+            cacheRef.current.set(query, data); 
             setResults(data);
             setHighlightedIndex(-1);
           }
@@ -93,7 +88,6 @@ function AuthorInput({ onChangeValue, value, displayName }: AuthorInputProps) {
     };
   }, [query, hasSelected]);
 
-  /* Auto-scroll */
   useEffect(() => {
     if (highlightedIndex >= 0 && itemRefs.current[highlightedIndex]) {
       itemRefs.current[highlightedIndex]?.scrollIntoView({
@@ -163,7 +157,7 @@ function AuthorInput({ onChangeValue, value, displayName }: AuthorInputProps) {
 
           setIsOpen(true);
           setLoading(true);
-          setResults([]); // Limpiar resultados viejos inmediatamente
+          setResults([]); 
         }}
         onKeyDown={handleKeyDown}
         className="

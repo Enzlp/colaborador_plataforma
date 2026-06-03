@@ -5,9 +5,6 @@ import FilterCard from "./FilterCard";
 import MetricsCard from "./MetricsCard";
 import { Info, TrendingUp, ChevronRight, Globe } from "lucide-react";
 
-/* =======================
-   Types
-======================= */
 
 interface Concept {
   id: string;
@@ -34,41 +31,31 @@ type Recommendation = {
   top_concepts: ConceptScore[];
 };
 
-/* =======================
-   Component
-======================= */
-
+/**
+ * Página de resultados de recomendaciones. Contiene los componentes de filtros y ajuste de pesos. Y la tabla de resultados. 
+ */
 export default function Results() {
   const location = useLocation();
 
-  /* ---- Data state ---- */
   const [loading, setLoading] = useState(true);
   const [totalResult, setTotalResult] = useState(0);
   const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
 
-  /* ---- Search context ---- */
   const [conceptList, setConceptList] = useState<Concept[]>([]);
   const [authorId, setAuthorId] = useState("");
 
-  /* ---- Hybrid weights ---- */
   const [peso1, setPeso1] = useState(0.5);
   const [peso2, setPeso2] = useState(0.5);
 
-  /* ---- Filters ---- */
   const [currentOrderBy, setCurrentOrderBy] = useState("sim");
   const [currentLimit, setCurrentLimit] = useState(50);
   const [currentCountry, setCurrentCountry] = useState("");
 
-  /* ---- UI ---- */
   const [showInfoRec, setShowInfoRec] = useState(false);
 
   const infoRecommendations =
     "Las recomendaciones se generan combinando afinidad temática y la red de colaboración del autor seleccionado. Dependiendo de tu elección, se usa un modelo individual o un sistema híbrido. Los scores están normalizados para poder compararlos.";
 
-  /* =======================
-     Init from location.state
-     (solo una vez)
-  ======================= */
   useEffect(() => {
     if (!location.state) return;
 
@@ -79,24 +66,21 @@ export default function Results() {
     if (aId !== "") setAuthorId(aId);
   }, []);
 
- /* =======================
-   Unified fetch
-======================= */
+
 const fetchRecommendations = async (overrides: Partial<any> = {}) => {
   try {
     setLoading(true);
-    setRecommendations([]); // 👈 Limpiar resultados anteriores inmediatamente
+    setRecommendations([]); 
 
     const payload: any = {
       order_by: currentOrderBy,
       limit: currentLimit,
-      ...overrides, // los overrides sobreescriben el estado viejo si difieren
+      ...overrides, 
     };
 
     if (conceptList.length > 0) payload.concept_vector = conceptList;
     if (authorId !== "") payload.author_id = authorId;
 
-    // 👇 Usar el override de country si existe, si no el estado actual
     const country = overrides.country_code !== undefined
       ? overrides.country_code
       : currentCountry;
@@ -124,20 +108,13 @@ const fetchRecommendations = async (overrides: Partial<any> = {}) => {
     setLoading(false);
   }
 };
-  /* =======================
-     Auto fetch when base
-     context changes
-  ======================= */
+
   useEffect(() => {
     if (conceptList.length === 0 && authorId === "") return;
     fetchRecommendations();
   }, [conceptList, authorId]);
 
-  /* =======================
-     Filters
-  ======================= */
   const applyFilters = (by: string, limit: number, country: string) => {
-    // 👇 Actualizar estado Y pasar los valores directamente como overrides
     setCurrentOrderBy(by);
     setCurrentLimit(limit);
     setCurrentCountry(country);
@@ -156,17 +133,12 @@ const fetchRecommendations = async (overrides: Partial<any> = {}) => {
     });
   };
 
-  /* =======================
-     Render
-  ======================= */
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-teal-50 px-4 md:px-8 py-6">
       <div className="max-w-7xl mx-auto">
 
-        {/* Search Summary */}
         <div className="mb-6 bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
 
-          {/* Breadcrumb */}
           <div className="flex items-center gap-2 text-sm text-gray-500 mb-4">
             <span>Inicio</span>
             <ChevronRight className="w-4 h-4" />
@@ -207,7 +179,6 @@ const fetchRecommendations = async (overrides: Partial<any> = {}) => {
           </div>
         </div>
 
-        {/* Filters + Metrics */}
         <div className="mb-6 flex flex-col lg:flex-row gap-6 items-stretch">
 
           <div className="w-full lg:w-2/3">
@@ -236,7 +207,6 @@ const fetchRecommendations = async (overrides: Partial<any> = {}) => {
           )}
         </div>
 
-        {/* Recommendations */}
         <RecommendedCard recs={recommendations} loading={loading} />
       </div>
     </div>

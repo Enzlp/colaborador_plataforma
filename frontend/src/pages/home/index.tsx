@@ -9,6 +9,10 @@ interface Concept {
   display_name: string;
 }
 
+/**
+ * Pagina principal de la plataforma. Contiene modos de búsqueda, importa inputs para búsqueda y agrega etiquetas de conceptos seleccionados. También posee boton
+ * que redirige a la página de resultados.
+ */
 export default function Home() {
   const [selected, setSelected] = useState<Concept[]>([]);
   const [authorVal, setAuthorVal] = useState<string>("");
@@ -76,10 +80,8 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-teal-50 via-white to-cyan-50">
-      {/* Main Content */}
       <div className="flex items-center justify-center p-4 sm:p-6 md:p-8" style={{ minHeight: 'calc(100vh - 89px)' }}>
         <div className="w-full max-w-4xl">
-          {/* Hero Section */}
           <div className="text-center mb-8 sm:mb-10 px-2">
             <div className="inline-flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 bg-gradient-to-br from-teal-500 to-cyan-600 rounded-2xl mb-4 sm:mb-6 shadow-xl">
               <Sparkles className="w-7 h-7 sm:w-8 sm:h-8 text-white" />
@@ -93,7 +95,6 @@ export default function Home() {
             </p>
           </div>
 
-          {/* Search Mode Selector */}
           <div className="bg-white/70 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-100 p-4 sm:p-6 mb-4 sm:mb-6">
             <div className="flex items-center gap-2 mb-3 sm:mb-4">
               <div className="w-1 h-5 sm:h-6 bg-gradient-to-b from-teal-500 to-cyan-600 rounded-full"></div>
@@ -157,9 +158,7 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Search Form */}
           <form onSubmit={searchRecommended} className="bg-white/70 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-100 p-5 sm:p-6 md:p-8">
-            {/* Concepts Input */}
             {(searchMode === 'both' || searchMode === 'concepts') && (
               <div className="mb-6 sm:mb-8">
                 <div className="flex items-center gap-2 mb-2 sm:mb-3">
@@ -173,7 +172,6 @@ export default function Home() {
                   onSelectedChange={setSelected}
                 />
                 
-                {/* Concept Tags */}
                 {selected.length > 0 && (
                   <div className="mt-3 sm:mt-4 p-3 sm:p-4 bg-gradient-to-br from-teal-50 to-cyan-50 rounded-xl border border-teal-100">
                     <div className="flex items-center justify-between mb-2 sm:mb-3">
@@ -204,7 +202,6 @@ export default function Home() {
               </div>
             )}
 
-            {/* Divider */}
             {searchMode === 'both' && (
               <div className="flex items-center gap-3 sm:gap-4 mb-6 sm:mb-8">
                 <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent"></div>
@@ -215,7 +212,6 @@ export default function Home() {
               </div>
             )}
 
-            {/* Author Input */}
             {(searchMode === 'both' || searchMode === 'author') && (
               <div className="mb-6 sm:mb-8">
                 <div className="flex items-center gap-2 mb-2 sm:mb-3">
@@ -235,7 +231,6 @@ export default function Home() {
               </div>
             )}
 
-            {/* Load Concepts Button */}
             {searchMode === 'both' && (
               <div className="mb-6 sm:mb-8">
                 <button
@@ -249,7 +244,6 @@ export default function Home() {
               </div>
             )}
 
-            {/* Submit Button */}
             <button
               type="submit"
               disabled={!isSearchEnabled()}
@@ -259,7 +253,6 @@ export default function Home() {
               <span>Recomendar investigadores</span>
             </button>
 
-            {/* Helper Text */}
             <div className="mt-4 sm:mt-5 p-3 sm:p-4 bg-gray-50 rounded-xl border border-gray-200">
               <p className="text-gray-600 text-xs sm:text-sm text-center">
                 {searchMode === 'both' && '💡 Combina conceptos y autor para resultados más precisos y personalizados'}

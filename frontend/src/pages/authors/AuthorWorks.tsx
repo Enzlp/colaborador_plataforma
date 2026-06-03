@@ -1,4 +1,4 @@
-// AutorWorks.tsx
+
 import { useEffect, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import LoadingWorks from './LoadingWorks';
@@ -24,6 +24,11 @@ interface Concept {
   display_name: string;
 }
 
+
+/**
+ * Tabla con últimas publicaciones del perfil de autor seleccionado en la pagina de perfil de autor. Define la lista de publicaciones que se cargan 
+ * en la tabla en esta vista.
+ */
 export default function AuthorWorks() {
   const { authorId } = useParams<{ authorId: string }>();
   const [allWorks, setAllWorks] = useState<Work[]>([]);
@@ -128,9 +133,7 @@ export default function AuthorWorks() {
   return (
     <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
 
-      {/* Header */}
       <div className="p-4 sm:p-6 border-b border-gray-200 bg-gray-50 flex items-center justify-between">
-        {/* Bloque izquierdo */}
         <div className="flex flex-col">
           <div className="flex items-center gap-2 mb-2">
             <div className="w-10 h-10 bg-gradient-to-br from-teal-500 to-cyan-600 rounded-lg flex items-center justify-center">
@@ -145,7 +148,6 @@ export default function AuthorWorks() {
           </p>
         </div>
 
-        {/* Bloque derecho */}
         {cList.length > 0 && (
           <div className="flex items-center gap-2">
             <select
@@ -173,7 +175,6 @@ export default function AuthorWorks() {
         )}
       </div>
 
-      {/* Estado vacío */}
       {!loading && allWorks.length === 0 && (
         <div className="p-8 text-center text-gray-500">
           <p className="text-sm sm:text-base">
@@ -187,10 +188,8 @@ export default function AuthorWorks() {
         </div>
       )}
 
-      {/* Contenido solo si hay resultados */}
       {allWorks.length > 0 && (
         <>
-          {/* Cards móvil */}
           <div className="block lg:hidden p-4 sm:p-6 space-y-4">
             {currentWorks.map((work) => (
               <div
@@ -252,7 +251,6 @@ export default function AuthorWorks() {
             ))}
           </div>
 
-          {/* Tabla desktop */}
           <div className="hidden lg:block overflow-x-auto">
             <table className="w-full border-collapse min-w-[700px]">
               <thead className="bg-gray-50 border-b border-gray-200 text-left text-sm text-gray-600 uppercase tracking-wider">
@@ -335,7 +333,6 @@ export default function AuthorWorks() {
             </table>
           </div>
 
-          {/* Pagination */}
           <div className="px-4 sm:px-6 py-3 border-t border-gray-200 flex flex-col sm:flex-row items-center justify-between gap-2 sm:gap-4">
             <div className="flex gap-2 w-full sm:w-auto justify-between sm:justify-start">
               <button

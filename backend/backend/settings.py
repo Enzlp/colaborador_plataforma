@@ -89,11 +89,11 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'collabr_db',
-        'USER': 'collabr_user',
-        'PASSWORD': 'iMeih9ePh4eenaeRiey9quahyuw_ib',
-        'HOST': '127.0.0.1',
-        'PORT': '5432', 
+        'NAME': 'db_name',
+        'USER': 'db_user',
+        'PASSWORD': 'db_password',
+        'HOST': 'db_host',
+        'PORT': 'db_port', 
         'OPTIONS': {
             'options': f'-c search_path=openalex,public',
             'connect_timeout': 10,

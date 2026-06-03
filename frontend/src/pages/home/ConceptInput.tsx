@@ -10,6 +10,9 @@ type ConceptInputProps = {
   onSelectedChange: (concepts: Concept[]) => void;
 };
 
+/**
+ * Input para conceptos de interés del usuario con autocompletado en la barra de búsqueda.
+ */
 function ConceptInput({ selected, onSelectedChange }: ConceptInputProps) {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<Concept[]>([]);
@@ -20,7 +23,6 @@ function ConceptInput({ selected, onSelectedChange }: ConceptInputProps) {
   const itemRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const cacheRef = useRef<Map<string, Concept[]>>(new Map());
 
-  /* Autocomplete con debounce + cache */
   useEffect(() => {
     if (!query) {
       setResults([]);
@@ -29,7 +31,6 @@ function ConceptInput({ selected, onSelectedChange }: ConceptInputProps) {
       return;
     }
 
-    // 1️⃣ Cache inmediato (UX instantánea)
     if (cacheRef.current.has(query)) {
       const cached = cacheRef.current.get(query)!;
       const filtered = cached.filter(
@@ -50,7 +51,7 @@ function ConceptInput({ selected, onSelectedChange }: ConceptInputProps) {
       )
         .then((res) => res.json())
         .then((data: Concept[]) => {
-          cacheRef.current.set(query, data); // 2️⃣ cache
+          cacheRef.current.set(query, data); 
           const filtered = data.filter(
             (item) => !selected.some((s) => s.id === item.id)
           );
@@ -71,7 +72,6 @@ function ConceptInput({ selected, onSelectedChange }: ConceptInputProps) {
     };
   }, [query, selected]);
 
-  /* Auto-scroll */
   useEffect(() => {
     if (highlightedIndex >= 0 && itemRefs.current[highlightedIndex]) {
       itemRefs.current[highlightedIndex]?.scrollIntoView({

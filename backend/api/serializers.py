@@ -1,5 +1,8 @@
 from rest_framework import serializers
 from .models import Author, MvIaConcept, MvLatamIaAuthorConcept, Institution, Work, MvRecommendationAuthorPool
+
+# Serializers estandarizan la salida del json
+
 class AuthorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Author

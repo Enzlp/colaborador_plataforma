@@ -23,7 +23,9 @@ interface Institution {
   country_code: string;
 }
 
-
+/**
+ * Página de perfil de autor dentro de la plataforma, con su información principal y la tabla de publicaciones recientes.
+ */
 export default function Authors() {
   const latamCountryCodes: { [key: string]: string } = {
     AR: "Argentina", BO: "Bolivia", BR: "Brazil", CL: "Chile",

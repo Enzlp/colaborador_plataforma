@@ -9,6 +9,9 @@ type MetricsCardProps = {
   fetchFunction: () => Promise<void>;
 };
 
+/**
+ * Componente en el que se ajustan los pesos que se asignaran a cada modelo en la señal final para generar las recomendaciones. 
+ */
 export default function MetricsCard({
   peso1,
   peso2,
@@ -35,9 +38,7 @@ export default function MetricsCard({
 
 return (
   <div className="bg-white rounded-2xl shadow-md border border-gray-100 p-5 w-full h-full flex flex-col">
-    {/* Contenido superior: header + sliders */}
     <div className="flex-1 flex flex-col">
-      {/* Header */}
       <div className="flex items-center gap-2 mb-4">
         <Award className="w-5 h-5 text-purple-600" />
         <h3 className="text-xl font-bold text-gray-900">Ajuste de Pesos</h3>
@@ -57,9 +58,8 @@ return (
         </div>
       </div>
 
-      {/* Sliders y suma */}
+
       <div className="space-y-4 flex-1">
-        {/* Afinidad temática */}
         <div>
           <div className="flex items-center justify-between mb-2">
             <label className="text-sm text-gray-600">Afinidad temática</label>
@@ -81,7 +81,6 @@ return (
           />
         </div>
 
-        {/* Red de colaboración */}
         <div>
           <div className="flex items-center justify-between mb-2">
             <label className="text-sm text-gray-600">Red de colaboración</label>
@@ -106,7 +105,6 @@ return (
       </div>
     </div>
 
-    {/* Botón aplicar abajo */}
     <div className="mt-4 flex justify-end">
       <button
         className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-teal-500 to-cyan-600 text-white rounded-lg hover:from-teal-600 hover:to-cyan-700 transition-all shadow-md hover:shadow-lg font-medium"

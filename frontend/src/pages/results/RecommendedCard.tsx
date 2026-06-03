@@ -28,6 +28,9 @@ interface RecommendedCardProps {
   loading: boolean;
 }
 
+/**
+ * "Tabla" con el listado de autores recomendados y su información y enlaces.
+ */
 export default function RecommendedCard({ recs, loading }: RecommendedCardProps) {
   const [page, setPage] = useState<number>(1);
   const itemsPerPage = 10;
@@ -63,11 +66,11 @@ export default function RecommendedCard({ recs, loading }: RecommendedCardProps)
     VE: "Venezuela",
   };
 
-  // Explicaciones
+
   const getRelevanceReasons = (affinity_score: number, network_score: number) => {
     const reasons = [];
     
-    // Afinidad temática (igual para ambos modelos)
+
     if (affinity_score >= 0.7) {
       reasons.push({
         icon: '🎯',
@@ -85,7 +88,6 @@ export default function RecommendedCard({ recs, loading }: RecommendedCardProps)
       });
     }
       
-    // Componente de red (lenguaje agnóstico)
     if (network_score >= 0.6) {
       reasons.push({
         icon: '🤝',
@@ -145,9 +147,7 @@ export default function RecommendedCard({ recs, loading }: RecommendedCardProps)
         >
           <div className="p-4 sm:p-5 md:p-6">
             <div className="flex flex-col lg:flex-row gap-4 sm:gap-6">
-              {/* Left: Avatar and Rank */}
               <div className="flex lg:flex-col items-center lg:items-start gap-3 sm:gap-4">
-                {/* Rank Badge */}
                 <div className="flex-shrink-0">
                   <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl flex items-center justify-center font-semibold text-sm sm:text-base ${
                     startIndex + index === 0 ? 'bg-gradient-to-br from-yellow-400 to-orange-500 text-white shadow-lg' :
@@ -159,7 +159,6 @@ export default function RecommendedCard({ recs, loading }: RecommendedCardProps)
                   </div>
                 </div>
                 
-                {/* Avatar */}
                 <div className="flex-shrink-0">
                   <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-teal-100 to-cyan-100 rounded-xl sm:rounded-2xl flex items-center justify-center ring-2 sm:ring-4 ring-white shadow-lg">
                     <User className="w-8 h-8 sm:w-10 sm:h-10 text-teal-600" />
@@ -167,12 +166,9 @@ export default function RecommendedCard({ recs, loading }: RecommendedCardProps)
                 </div>
               </div>
 
-              {/* Center: Content */}
               <div className="flex-1 min-w-0">
                 <div className="flex flex-col lg:flex-row gap-4">
-                  {/* Main Content */}
                   <div className="flex-1 min-w-0">
-                    {/* Name and Institution */}
                     <div className="mb-3 sm:mb-4">
                       <div className="flex items-start justify-between gap-3 sm:gap-4 mb-2">
                         <h2 className="text-lg sm:text-xl font-bold text-gray-900 group-hover:text-teal-600 transition-colors break-words">
@@ -188,7 +184,6 @@ export default function RecommendedCard({ recs, loading }: RecommendedCardProps)
                       </p>
                     </div>
 
-                    {/* Model Scores */}
                     <div className="flex flex-wrap gap-2 sm:gap-3 mb-3 sm:mb-4">
                       <div className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 sm:py-2 bg-teal-50 rounded-lg border border-teal-100">
                         <div className="w-2 h-2 bg-teal-500 rounded-full flex-shrink-0"></div>
@@ -206,7 +201,6 @@ export default function RecommendedCard({ recs, loading }: RecommendedCardProps)
                       </div>
                     </div>
 
-                    {/* Topics */}
                     <div className="mb-3 sm:mb-4">
                       <div className="flex flex-wrap gap-1.5 sm:gap-2">
                         {rec.top_concepts.map((concept: ConceptScore) => (
@@ -220,7 +214,6 @@ export default function RecommendedCard({ recs, loading }: RecommendedCardProps)
                       </div>
                     </div>
 
-                    {/* Stats */}
                     <div className="flex flex-wrap gap-4 sm:gap-6 mb-3 sm:mb-4 pb-3 sm:pb-4 border-b border-gray-100">
                       <div className="flex items-center gap-2">
                         <div className="w-9 h-9 sm:w-10 sm:h-10 bg-blue-50 rounded-lg flex items-center justify-center flex-shrink-0">
@@ -242,7 +235,6 @@ export default function RecommendedCard({ recs, loading }: RecommendedCardProps)
                       </div>
                     </div>
 
-                    {/* Actions */}
                     <div className="flex flex-col sm:flex-row flex-wrap gap-2 sm:gap-3">
                       <button
                         onClick={() => navigate(`/authors/${rec.author_id.split("/").pop()}`,{ state: { conceptList } })}
@@ -266,7 +258,6 @@ export default function RecommendedCard({ recs, loading }: RecommendedCardProps)
                     </div>
                   </div>
 
-                  {/* Right Side: Relevance Reasons - Desktop */}
                   <div className="hidden xl:block w-64 flex-shrink-0">
                     <div className="bg-gradient-to-br from-teal-50 to-cyan-50 rounded-xl p-4 border border-teal-100 sticky top-4">
                       <div className="flex items-center gap-2 mb-3">
@@ -295,7 +286,6 @@ export default function RecommendedCard({ recs, loading }: RecommendedCardProps)
                   </div>
                 </div>
 
-                {/* Relevance Reasons - Mobile/Tablet */}
                 <div className="xl:hidden mt-4 pt-4 border-t border-gray-200">
                   <div className="bg-gradient-to-br from-teal-50 to-cyan-50 rounded-xl p-3 sm:p-4 border border-teal-100">
                     <div className="flex items-center gap-2 mb-3">
@@ -328,7 +318,6 @@ export default function RecommendedCard({ recs, loading }: RecommendedCardProps)
         </div>
       ))}
 
-      {/* Pagination */}
       {totalPages > 1 && (
         <div className="flex items-center justify-center gap-3 sm:gap-4 mt-6 sm:mt-8">
           <button

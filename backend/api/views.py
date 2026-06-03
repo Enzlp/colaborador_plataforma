@@ -15,6 +15,7 @@ from django.db.models import Func, Value
 from django.db.models.fields import CharField
 import re
 
+
 class AuthorViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Author.objects.all()
     serializer_class = AuthorSerializer
@@ -72,7 +73,6 @@ class AuthorWorksView(APIView):
                 work_concepts__concept__id=concept_id
             )
         
-        # SOLUCIÓN: Deduplicar solo por ID, luego ordenar
         dedup_ids = (
             base_qs
             .order_by("id", "-publication_date")
@@ -101,16 +101,10 @@ def generar_patron_acronimo(query):
     Convierte una cadena corta (ej: 'nlp') en un patrón de regex
     para buscar las iniciales de cada palabra (ej: 'N.*L.*P.*').
     """
-    # 1. Asegurarse de que la búsqueda sea insensible a mayúsculas
+
     query = query.upper()
     
-    # 2. Insertar '.*' (cero o más caracteres) entre cada letra.
-    # Esto busca: [Inicial1] seguido de cualquier cosa, luego [Inicial2], etc.
-    # Ejemplo: 'N.*L.*P.*'
     pattern = '.*'.join(list(query))
-    
-    # 3. Añadir el marcador de inicio de cadena (si quieres que solo busque al inicio del concepto)
-    # o solo usar el patrón. En este caso, buscaremos el acrónimo dentro de la cadena.
     
     return pattern
 
@@ -123,21 +117,14 @@ class ConceptAutocomplete(generics.ListAPIView):
         if not query:
             return MvIaConcept.objects.none()
 
-        # --- A. Búsqueda por Acrónimo (NLP -> N.*L.*P.*) ---
         acronym_pattern = generar_patron_acronimo(query)
-
-        # 1. Filtro normal (ej: 'Natu' trae 'Natural Language Processing')
         filtro_normal = Q(display_name__istartswith=query)
-        
-        # 2. Filtro acrónimo (ej: 'nlp' trae 'Natural Language Processing' usando regex)
-        # ^ indica el inicio de la cadena, \y indica el límite de palabra.
-        # Esto busca las iniciales de las palabras del concepto.
         filtro_acronimo = Q(display_name__iregex=r'\y' + acronym_pattern)
 
-        # 3. Combinar los filtros con OR (|)
+
         queryset = MvIaConcept.objects.filter(
             filtro_normal | filtro_acronimo
-        ).distinct() # Usamos distinct para evitar duplicados si la búsqueda coincide en ambos filtros
+        ).distinct() 
         
         return queryset[:10]
 
@@ -193,17 +180,15 @@ class RecommendationViewSet(APIView):
         ContentBasedQueries._initialize_cache()
         concept_to_index = ContentBasedQueries._cache['concept_to_index']
 
-        # -------------------------
-        # IDs semánticos relevantes
-        # -------------------------
+
         AI_ID = "https://openalex.org/C154945302"
         DATA_SCIENCE_ID = "https://openalex.org/C2522767166"
         DATA_MINING_ID = "https://openalex.org/C124101348"
 
         SPECIFIC_SUBFIELDS = {
-            "https://openalex.org/C204321447",  # NLP
-            "https://openalex.org/C31972630",   # Computer Vision
-            "https://openalex.org/C28490314",   # Speech Recognition
+            "https://openalex.org/C204321447",  
+            "https://openalex.org/C31972630",  
+            "https://openalex.org/C28490314",   
         }
 
         # Si hay filtro por país, traemos más candidatos primero
@@ -231,9 +216,7 @@ class RecommendationViewSet(APIView):
         cb_scores_dict = {aid: cb for aid, _, cb, _ in recommendations}
         cf_scores_dict = {aid: cf for aid, _, _, cf in recommendations}
 
-        # -------------------------
         # FILTRO POR PAÍS
-        # -------------------------
         if country_code:
             valid_author_ids = set(
                 MvLatamAuthor.objects.filter(
@@ -258,9 +241,6 @@ class RecommendationViewSet(APIView):
         # Actualizar ids
         top_author_ids = [aid for aid, _, _, _ in recommendations]
 
-        # -------------------------
-        # QUERY AUTORES
-        # -------------------------
         authors_dict = MvLatamAuthor.objects.filter(
             id__in=top_author_ids
         ).only(
@@ -273,9 +253,7 @@ class RecommendationViewSet(APIView):
             'institution_name'
         ).in_bulk()
 
-        # -------------------------
         # ORDENAMIENTO
-        # -------------------------
         if order_by == 'works':
             recommendations = sorted(
                 recommendations,
@@ -300,9 +278,7 @@ class RecommendationViewSet(APIView):
         # Recalcular ids finales
         top_author_ids = [aid for aid, _, _, _ in recommendations]
 
-        # =========================================================
-        # 🔥 TOP CONCEPTS (UI) — TF NORMALIZADO + FILTRO SEMÁNTICO
-        # =========================================================
+        # Conceptos top
         concept_rows = MvLatamIaAuthorConcept.objects.filter(
             author_id__in=top_author_ids
         )
@@ -378,9 +354,7 @@ class RecommendationViewSet(APIView):
                 for cid, score in pairs
             ]
 
-        # -------------------------
-        # PAYLOAD FINAL
-        # -------------------------
+
         author_data = []
         for aid in top_author_ids:
             author = authors_dict.get(aid)

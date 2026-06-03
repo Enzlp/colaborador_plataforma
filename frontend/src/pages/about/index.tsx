@@ -1,9 +1,11 @@
 import { Globe, Target, Network, TrendingUp, Users, BookOpen, Lightbulb, Sparkles } from 'lucide-react';
 
+/**
+ * Página de Acerca de (about) con la información de la plataforma.
+ */
 export default function About() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-teal-50">
-      {/* Hero Section */}
       <div className="bg-gradient-to-br from-teal-50 via-cyan-50 to-white py-12 sm:py-16 md:py-20 px-4 sm:px-6">
         <div className="max-w-4xl mx-auto text-center">
           <div className="inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-teal-500 to-cyan-600 rounded-2xl mb-4 sm:mb-6 shadow-xl">
@@ -20,7 +22,6 @@ export default function About() {
         </div>
       </div>
 
-      {/* Mission Section */}
       <div className="py-12 sm:py-16 px-4 sm:px-6 bg-white">
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8">
@@ -57,7 +58,6 @@ export default function About() {
         </div>
       </div>
 
-      {/* Features Section */}
       <div className="py-12 sm:py-16 px-4 sm:px-6">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-8 sm:mb-12">
@@ -68,7 +68,6 @@ export default function About() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-            {/* Feature 1 */}
             <div className="bg-white rounded-2xl p-5 sm:p-6 shadow-md hover:shadow-xl transition-all duration-300 border border-gray-100">
               <div className="flex items-start gap-3 sm:gap-4">
                 <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-teal-100 to-cyan-100 rounded-xl flex items-center justify-center flex-shrink-0">
@@ -83,7 +82,6 @@ export default function About() {
               </div>
             </div>
 
-            {/* Feature 2 */}
             <div className="bg-white rounded-2xl p-5 sm:p-6 shadow-md hover:shadow-xl transition-all duration-300 border border-gray-100">
               <div className="flex items-start gap-3 sm:gap-4">
                 <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-purple-100 to-pink-100 rounded-xl flex items-center justify-center flex-shrink-0">
@@ -99,7 +97,6 @@ export default function About() {
               </div>
             </div>
 
-            {/* Feature 3 */}
             <div className="bg-white rounded-2xl p-5 sm:p-6 shadow-md hover:shadow-xl transition-all duration-300 border border-gray-100">
               <div className="flex items-start gap-3 sm:gap-4">
                 <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-blue-100 to-cyan-100 rounded-xl flex items-center justify-center flex-shrink-0">
@@ -114,8 +111,6 @@ export default function About() {
                 </div>
               </div>
             </div>
-
-            {/* Feature 4 */}
             <div className="bg-white rounded-2xl p-5 sm:p-6 shadow-md hover:shadow-xl transition-all duration-300 border border-gray-100">
               <div className="flex items-start gap-3 sm:gap-4">
                 <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-green-100 to-teal-100 rounded-xl flex items-center justify-center flex-shrink-0">
@@ -134,7 +129,6 @@ export default function About() {
         </div>
       </div>
 
-      {/* How It Works Section */}
       <div className="py-12 sm:py-16 px-4 sm:px-6 bg-white">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-8 sm:mb-12">
@@ -187,7 +181,6 @@ export default function About() {
         </div>
       </div>
 
-      {/* OpenAlex and Concept Hierarchy Section */}
       <div className="py-12 sm:py-16 px-4 sm:px-6">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-8 sm:mb-12">

@@ -1,6 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import { HelpCircle, Globe } from 'lucide-react';
 
+/**
+ * Barra de navegación superior
+ * Sirve para navegar a distintas partes de la plataforma, es reutilzable
+ */
 function Navbar() {
   const navigate = useNavigate();
   return (

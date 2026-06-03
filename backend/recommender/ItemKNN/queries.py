@@ -3,13 +3,16 @@ import numpy as np
 from scipy.sparse import load_npz
 from implicit.nearest_neighbours import CosineRecommender
 
+"""
+Modelo Itemknn para recomendaciones basadas en filtrado colaborativo
+- método que inicializa lectura de archivos en caché
+- método que genera la lista de recomendaciones en tuplas id y score (normalizado min-max)
+"""
 class ItemKNNQueries:
-    # Cache estático a nivel de clase
     _cache = None
 
     @classmethod
     def _initialize_cache(cls):
-        """Inicializa el cache cargando el modelo y la matriz sparse"""
         if cls._cache is not None:
             return
 
@@ -18,7 +21,6 @@ class ItemKNNQueries:
             "files"
         )
 
-        # 1. Cargar mapeos
         author_to_idx = np.load(
             os.path.join(files_dir, "author_to_idx.npy"),
             allow_pickle=True
@@ -28,11 +30,8 @@ class ItemKNNQueries:
             allow_pickle=True
         ).item()
 
-        # 2. Cargar Matriz de Interacciones
         X_full = load_npz(os.path.join(files_dir, "X_full.npz")).tocsr()
 
-        # 3. Cargar el modelo correctamente
-        # El método load es un classmethod, devuelve la instancia cargada.
         model_path = os.path.join(files_dir, "itemknn_best.npz")
         model = CosineRecommender.load(model_path)
 
@@ -45,7 +44,6 @@ class ItemKNNQueries:
 
     @classmethod
     def get_recommendations(cls, author_id, n_recs=None):
-        # Inicializar cache
         cls._initialize_cache()
 
         author_to_idx = cls._cache["author_to_idx"]
@@ -59,12 +57,9 @@ class ItemKNNQueries:
 
         author_idx = author_to_idx[author_id]
 
-        # Si no se especifica n_recs, intentamos traer a todos para el sorting global
         if n_recs is None:
             n_recs = len(idx_to_author) - 1
 
-        # 🔹 Obtener recomendaciones de Implicit
-        # recommend() devuelve IDs y scores (ya filtrando los que el autor ya conoce)
         ids, scores = model.recommend(
             userid=author_idx,
             user_items=X_full[author_idx],
@@ -80,7 +75,6 @@ class ItemKNNQueries:
         if len(scores) == 0:
             return []
 
-        # 🔹 Normalización Min-Max (Score de Fusión)
         min_score = scores.min()
         max_score = scores.max()
         epsilon = 1e-8
@@ -90,7 +84,6 @@ class ItemKNNQueries:
         else:
             scores_norm = np.zeros_like(scores)
 
-        # Construir lista de recomendaciones
         recommendations = [
             (idx_to_author[idx], float(s_norm))
             for idx, s_norm in zip(ids, scores_norm)

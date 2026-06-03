@@ -8,31 +8,20 @@ from api.models import MvIaCoauthorshipLatam
 
 def build_author_knn_data(
     output_dir,
-    use_log_weight=True
+    use_log_weight=False
 ):
     """
     Construye matriz sparse autor × autor + pares únicos
     para ItemKNN (implicit)
-
-    Parámetros
-    ----------
-    output_dir : str
-        Carpeta donde se guardan los archivos
-    use_log_weight : bool
-        Si True: w = log(1 + shared_works)
-        Si False: w = shared_works
     """
 
     os.makedirs(output_dir, exist_ok=True)
 
     print("==============================================")
-    print("📌 Construyendo datos para ItemKNN (implicit)")
+    print(" Construyendo datos para ItemKNN (implicit)")
     print("==============================================\n")
 
-    # --------------------------------------------------------
-    # 1) Cargar datos desde la BD
-    # --------------------------------------------------------
-    print("🔹 Cargando datos desde la BD...")
+    print(" Cargando datos desde la BD...")
 
     qs = MvIaCoauthorshipLatam.objects.all().values(
         "coauthor_1",
@@ -64,7 +53,7 @@ def build_author_knn_data(
         })
 
     # --------------------------------------------------------
-    # 2) Crear mapping CONSISTENTE
+    # 2) Crear mapping
     # --------------------------------------------------------
     author_list = sorted(all_authors)
     author_to_idx = {a: i for i, a in enumerate(author_list)}
@@ -76,7 +65,7 @@ def build_author_knn_data(
     # --------------------------------------------------------
     # 3) Construir matriz sparse (simétrica)
     # --------------------------------------------------------
-    print("🔹 Construyendo matriz sparse...")
+    print(" Construyendo matriz sparse...")
 
     for p in pairs_for_df:
         i = author_to_idx[p["pair_min"]]
@@ -99,14 +88,13 @@ def build_author_knn_data(
         shape=(n, n)
     )
 
-    # Tipos críticos para Colab / implicit
     R.indices = R.indices.astype(np.int32)
     R.indptr = R.indptr.astype(np.int32)
 
     print(f"Matriz: shape={R.shape}, nnz={R.nnz:,}")
 
     # --------------------------------------------------------
-    # 4) DataFrame de pares únicos (GROUND TRUTH)
+    # 4) DataFrame de pares únicos
     # --------------------------------------------------------
     df_pairs_unique = (
         pd.DataFrame(pairs_for_df)
@@ -143,7 +131,7 @@ def build_author_knn_data(
     )
 
     print("\n==============================================")
-    print("✅ Archivos generados correctamente:")
+    print(" Archivos generados correctamente:")
     print("  - author_author_matrix.npz")
     print("  - author_to_idx.npy")
     print("  - idx_to_author.npy")

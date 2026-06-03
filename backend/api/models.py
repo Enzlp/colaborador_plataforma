@@ -14,7 +14,7 @@ class SafeJSONField(models.JSONField):
                 return []
         return value
 
-# Create your models here.
+# Modelos que representan las tablas de la DB.
 
 class Institution(models.Model):
     id = models.TextField(primary_key=True)
@@ -30,7 +30,7 @@ class Institution(models.Model):
     works_count = models.IntegerField(blank=True, null=True)
     cited_by_count = models.IntegerField(blank=True, null=True)
     works_api_url = models.TextField(blank=True, null=True)
-    updated_date = models.DateTimeField(blank=True, null=True)  # timestamp without timezone
+    updated_date = models.DateTimeField(blank=True, null=True)  
 
     class Meta:
         db_table = 'institutions'

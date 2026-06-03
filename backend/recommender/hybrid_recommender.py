@@ -1,9 +1,11 @@
-# Contenido de recommender/hybrid_recommender.py (Modificado)
-
 from recommender.content_based.queries import ContentBasedQueries
 from recommender.matrix_factorization.queries import MFQueries
 from recommender.ItemKNN.queries import ItemKNNQueries
 
+"""
+Modelo Híbrido final de recomendaciones
+- método para obtener recomendaciones finales, ingresando top-k, y valores de pesos para cada modelo alpha y beta.
+"""
 class HybridRecommender:
     @staticmethod
     def get_recommendations(
@@ -13,21 +15,17 @@ class HybridRecommender:
         alpha=0.5,
         beta=0.5
     ):
-        # Referencias directas a las clases (NO instancias)
+        
         content = ContentBasedQueries
         colab = ItemKNNQueries
 
-        # -----------------------------------------------------
         # SOLO CONTENT-BASED
-        # -----------------------------------------------------
         if user_input and not author_id:
             recs = content.get_recommendations(user_input=user_input)
             formatted = [(aid, cb_score, cb_score, 0.0) for aid, cb_score in recs]
             return formatted[:k]
 
-        # -----------------------------------------------------
-        # SOLO COLLABORATIVE
-        # -----------------------------------------------------
+        # SOLO FILTRADO COLABORATIVO
         if author_id and not user_input:
             recs = colab.get_recommendations(author_id=author_id)
             formatted = [(aid, cf_score, 0.0, cf_score) for aid, cf_score in recs]
@@ -37,9 +35,7 @@ class HybridRecommender:
         if not user_input and not author_id:
             return []
 
-        # -----------------------------------------------------
         # HÍBRIDO
-        # -----------------------------------------------------
         recs_cb = content.get_recommendations(user_input=user_input)
         recs_cf = colab.get_recommendations(author_id=author_id)
 
