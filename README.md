@@ -16,12 +16,6 @@ La aplicación fue desarrollada usando React, Django Rest Framework y Postgresql
 
 Se debe contar con el snapshot descargado en formato PostgreSQL de OpenAlex. Una vez hecho esto se debe ingresar la informacion de la DB para poder conectar en el archivo settings de la carpeta backend. Esta información se encuentra en la variable DATABASES.
 
-La aplicación utiliza la DB para poder traer la información final, sin embargo para optimizar consultas se hace un precalculo de las matrices de colaboración en archivos externos. Para poder generar estos archivos, se utiliza el script build_models.py asegurandose que la DB este conectada y tenga las vistas correctas definidas en models.
-
-``` cmd
-python build_models.py
-```
-
 Para poder ejecutar el backend de la aplicación primero se debe crear un ambiente virtual para poder instalar las librerias necesarias. 
 
 ``` cmd
@@ -33,6 +27,12 @@ Para instalar las librerias correspondientes se utiliza el archivo requirements 
 ``` cmd
 pip install -r requirements.txt
 ``` 
+
+La aplicación utiliza la DB para poder traer la información final, sin embargo para optimizar consultas se hace un precalculo de las matrices de colaboración en archivos externos. Para poder generar estos archivos, se utiliza el script build_models.py asegurandose que la DB este conectada y tenga las vistas correctas definidas en models.
+
+``` cmd
+python build_models.py
+```
 
 No es necesario el uso de migraciones, ya que el sistema esta diseñado para acoplarse a la DB y no crear tablas adicionales, sin embargo puede ser útil a futuro si se agregan tablas propias de la plataforma al sistema.
 
